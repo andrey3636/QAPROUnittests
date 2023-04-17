@@ -1,9 +1,11 @@
 import java.util.Locale;
 
+import static java.lang.Math.round;
+
 public class Cost {
     public double deliveryCostCalc(double distance, boolean big, boolean fragile, String load ){
         double minCost = 400;
-        double finalCost = 0; //todo  было minCost стало 0
+        double finalCost = 0;
         double distanceValue = distance;
         boolean bigValue = big;
         boolean fragileValue = fragile;
@@ -22,7 +24,7 @@ public class Cost {
             finalCost+=50;
         }
         else{
-            throw new IllegalArgumentException("Расстояние не может быть меньше нуля, физика против!"); //todo было больше стало меньше в предложении
+            throw new IllegalArgumentException("Расстояние не может быть меньше нуля, физика против!");
         }
         if (bigValue==true){
             finalCost+=200;
@@ -31,44 +33,36 @@ public class Cost {
             finalCost+=100;
         }
         else {
-            throw new IllegalArgumentException("Некорректное значение аргумента big. Допустимо true  или false"); //todo  стояло два True в предложении
+            throw new IllegalArgumentException("Некорректное значение аргумента big. Допустимо true или false");
         }
-        if (fragileValue==false){   //todo добавил условие False и  finalCost+=0
-            finalCost+=0;
+        if (fragileValue==true){
+            if (distanceValue>30){
+                throw new IllegalArgumentException("Хрупкие грузы нельзя возить далее 30 км");
+            }
+            finalCost+=300;
         }
-
-        else if (fragileValue==true){
-            if (distanceValue<=30 & distanceValue>=0){ //todo добавил корректную проверку
-                finalCost+=300;
-            }
-            else if (fragileValue==true){
-                if (distanceValue > 30) {
-                    throw new IllegalArgumentException("хрупкие грузы нельзя перевозить на дальность выше 30 км");}
-            }
-
+        else if (fragileValue==false){
         }
         else {
             throw new IllegalArgumentException("Некорректное значение аргумента fragile. Допустимо true  или false");
         }
-        loadValue.toLowerCase(Locale.ROOT);
+        loadValue = loadValue.toLowerCase(Locale.ROOT);
+
         switch (loadValue){
-            case ("очень высокая"): //todo были неверные коэффициенты
-                finalCost*=1.6;
-                break;
             case ("высокая"):
                 finalCost*=1.4;
+                break;
+            case ("очень высокая"):
+                finalCost*=1.6;
                 break;
             case ("повышенная"):
                 finalCost*=1.2;
                 break;
-            case ("обычная"): //todo добавил проверку "обычная"
-                finalCost*=1;
-                break;
         }
+        System.out.println("finalCost after loadValue: " + finalCost);
         if (finalCost < minCost){
             finalCost = minCost;
         }
-        return Math.round(finalCost); //todo добавил округления
+        return round(finalCost);
     }
 }
-
